@@ -1,4 +1,4 @@
-import peeweedbevolve # new; must be imported before models
+import peeweedbevolve
 from flask import Flask, render_template, request
 from models import db
 
@@ -13,9 +13,9 @@ def after_request(response):
    db.close()
    return response
 
-@app.cli.command() # new
-def migrate(): # new 
-   db.evolve(ignore_tables={'base_model'}) # new
+@app.cli.command()
+def migrate():
+   db.evolve(ignore_tables={'base_model'})
 
 @app.route("/")
 def index():

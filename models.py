@@ -3,7 +3,7 @@ import peewee as pw
 import datetime
 from playhouse.postgres_ext import PostgresqlExtDatabase
 
-db = PostgresqlExtDatabase(os.getenv('DATABASE'),user="postgres", password='syakir1997')
+db = PostgresqlExtDatabase(os.getenv('DATABASE'))
 
 class BaseModel(pw.Model):
    created_at = pw.DateTimeField(default=datetime.datetime.now)
