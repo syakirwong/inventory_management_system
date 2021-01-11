@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Add Store</h1>
+    <form action="{{ url_for('receive_store') }}" method="POST">
+        <div class="form-group">
+            <label for="add-store">Store's name</label>
+            <input type="text" class="form-control" id="add-store" aria-describedby="emailHelp" placeholder="Enter store's name" name=store_name>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+{% endblock %}
