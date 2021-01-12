@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Add Warehouse</h1>
+    <form action="{{ url_for('receive_warehouse') }}" method="POST">
+        <div class="form-group">
+            <label for="add-warehouse">Warehouse's location</label>
+            <input type="text" class="form-control" id="add-warehouse" aria-describedby="emailHelp" placeholder="Enter warehouse's location" name=warehouse_location>
+        </div>
+
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Select store</label>
+            <select class="form-control" id="exampleFormControlSelect1" name=store_id>
+                {% for store in stores %}
+                    <option value={{store.id}}>{{store.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+    </form>
+
+{% endblock %}

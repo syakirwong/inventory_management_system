@@ -1,5 +1,12 @@
 {% extends "layout.html" %}
 {% block content %}
+    <h1>Stores</h1>
+    <ul class="list-group">
+        {% for store in stores%}
+            <li class="list-group-item">{{store.name}}</li>
+        {% endfor%}
+    </ul>
+    </br>
     <h1>Add Store</h1>
     <form action="{{ url_for('receive_store') }}" method="POST">
         <div class="form-group">
