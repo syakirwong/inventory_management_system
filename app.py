@@ -1,8 +1,10 @@
 import peeweedbevolve
-from flask import Flask, render_template, request
+import os
+from flask import Flask, render_template, request, flash, redirect, url_for
 from models import *
 
 app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY")
 
 @app.before_request
 def before_request():
@@ -21,7 +23,7 @@ def migrate():
 def index():
    return render_template('index.html')
 
-@app.route("/store")
+@app.route("/store", methods=["GET"])
 def add_store():
    stores = Store.select()
    return render_template('store.html', stores=stores)
@@ -37,6 +39,27 @@ def receive_store():
    store = Store(name = store_name)
    store.save()
    return render_template('accept_store.html', store_name=store_name)
+
+@app.route("/store/<int:id>/update", methods=["POST"])
+def edit_store(id):
+    store = Store(
+        id=id,
+        name=request.form['name']
+    )
+    if store.save(only=[Store.name]):
+        flash("Your store's name has been updated!")
+    else:
+        flash("Unable to edit store name!")
+    return redirect(url_for('add_store', id=id))
+
+@app.route("/store/<int:id>/delete", methods=["POST"])
+def delete_store(id):
+    store = Store.get_by_id(id)
+    if store.delete_instance(recursive=True):
+        flash("Successfully deleted store!")
+    else:
+        flash("Unable to delete store!")
+    return redirect(url_for('add_store'))
 
 @app.route("/warehouse")
 def add_warehouse():
