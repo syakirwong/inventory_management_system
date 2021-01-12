@@ -50,7 +50,7 @@ def edit_store(id):
         flash("Your store's name has been updated!")
     else:
         flash("Unable to edit store name!")
-    return redirect(url_for('add_store', id=id))
+    return redirect(url_for('add_store'))
 
 @app.route("/store/<int:id>/delete", methods=["POST"])
 def delete_store(id):
@@ -61,10 +61,11 @@ def delete_store(id):
         flash("Unable to delete store!")
     return redirect(url_for('add_store'))
 
-@app.route("/warehouse")
+@app.route("/warehouse", methods=["GET"])
 def add_warehouse():
+   warehouses = Warehouse.select()
    stores = Store.select()
-   return render_template('warehouse.html', stores = stores)
+   return render_template('warehouse.html', stores = stores, warehouses=warehouses)
 
 @app.route("/accept-add-warehouse-request", methods=["POST"])
 def receive_warehouse():
@@ -73,6 +74,33 @@ def receive_warehouse():
    warehouse = Warehouse(location = warehouse_location, store_id = store)
    warehouse.save()
    return render_template('accept_warehouse.html', location = warehouse_location, store = store)
+
+@app.route("/warehouse/<int:id>", methods=["GET"])
+def view_individual_warehouse(id):
+    warehouse = Warehouse.get_by_id(id)
+    stores = Store.select()
+    return render_template('view-warehouse.html', warehouse=warehouse, stores=stores)
+
+@app.route("/warehouse/<int:id>/update", methods=["POST"])
+def update_warehouse(id):
+    warehouse = Warehouse(
+        id=id,
+        location=request.form['location']
+    )
+    if warehouse.save(only=[Warehouse.location]):
+        flash("Your warehouse location has been updated!")
+    else:
+        flash("Could not update warehouse's location!")
+    return redirect(url_for('view_individual_warehouse', id=id))
+
+@app.route("/warehouse/<int:id>/delete", methods=["POST"])
+def delete_warehouse(id):
+    warehouse = Warehouse.get_by_id(id)
+    if warehouse.delete_instance():
+        flash("Deleted warehouse!")
+    else:
+        flash("Could not delete warehouse!")
+    return redirect(url_for('add_warehouse'))
 
 if __name__ == '__main__':
    app.run()

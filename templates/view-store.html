@@ -1,7 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
 <h1>{{store.name}}'s Store</h1>
-<p>Number of warehouse</p>
+<h3>Number of warehouse</h3>
+<p>{{store.warehouses|length}}</p>
+<h3>Warehouse Locations</h3>
+<ul>
+    {% for w in store.warehouses %}
+    <li>{{w.location}}</li>
+    {% endfor %}
+</ul>
 
 <form action="{{ url_for('edit_store', id=store.id) }}" method="POST">
     <div class="form-group">
