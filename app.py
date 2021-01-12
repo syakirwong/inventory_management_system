@@ -37,8 +37,11 @@ def view_individual_store(id):
 def receive_store():
    store_name = request.form['store_name']
    store = Store(name = store_name)
-   store.save()
-   return render_template('accept_store.html', store_name=store_name)
+   if store.save():
+      flash("Store has been succesfully added!")
+   else:
+      flash("Could not be saved!")
+   return redirect(url_for('add_store'))
 
 @app.route("/store/<int:id>/update", methods=["POST"])
 def edit_store(id):
